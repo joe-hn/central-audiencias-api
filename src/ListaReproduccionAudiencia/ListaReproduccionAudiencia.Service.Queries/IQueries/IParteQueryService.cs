@@ -11,5 +11,7 @@ namespace ListaReproduccionAudiencia.Service.Queries.IQueries
     public interface IParteQueryService
     {        
         Task<List<ParteDto>> GetAudienciaIdAsync(Guid audienciaId);
+
+        Task<List<ParteDto>> GetParteAsync();
     }
 }

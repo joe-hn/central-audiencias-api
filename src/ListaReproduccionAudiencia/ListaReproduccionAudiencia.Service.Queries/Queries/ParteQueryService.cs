@@ -27,6 +27,13 @@ namespace ListaReproduccionAudiencia.Service.Queries.Queries
             var entities = await this.repository.GetEntity<Parte>().Where(x => x.AudienciaId == audienciaId).ToListAsync();
             return this.mapper.Map<List<ParteDto>>(entities);
         }
-        
+
+        public async Task<List<ParteDto>> GetParteAsync()
+        {
+            var entities = await this.repository.GetEntity<Parte>().ToListAsync();
+            return this.mapper.Map<List<ParteDto>>(entities);
+        }
+
+
     }
 }

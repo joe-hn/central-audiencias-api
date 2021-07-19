@@ -56,5 +56,13 @@ namespace ListaReproduccionAudiencia.Api.Controllers
             return Ok(data);
         }       
 
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAllPartes()
+        {
+            var data = await this.queryParte.GetParteAsync();
+            return Ok(data);
+        }
+
     }
 }
