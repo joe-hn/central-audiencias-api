@@ -35,7 +35,7 @@ namespace SEJE.EFCORE.Extensions
             where TEntity : class, IEntityBase
         {
             if (currentPage < 1 || pageSize < 1)
-                return default;
+                return default;            
 
             var totalItems = await query.CountAsync();
 

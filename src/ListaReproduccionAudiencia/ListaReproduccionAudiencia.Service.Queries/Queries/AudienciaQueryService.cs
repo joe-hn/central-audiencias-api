@@ -6,7 +6,7 @@ using ListaReproduccionAudiencia.Service.Queries.IQueries;
 using Microsoft.EntityFrameworkCore;
 using SEJE.CORE.Model.Pager;
 using SEJE.EFCORE.Extensions;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,7 +25,7 @@ namespace ListaReproduccionAudiencia.Service.Queries.Queries
 
         public async Task<List<AudienciaDto>> GetAsync()
         {
-            var entities = await this.repository.GetEntity<Audiencia>().ToListAsync();
+            var entities = await this.repository.GetEntity<Audiencia>().OrderBy(c => c.Hora).ToListAsync();                       
             return this.mapper.Map<List<AudienciaDto>>(entities);
         }
         

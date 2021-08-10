@@ -3,8 +3,11 @@ using Anuncio.Service.Queries.IQueries;
 using MediatR;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 using System;
+using System.IO;
 using System.Threading.Tasks;
+using WMPLib;
 
 namespace Anuncio.Api.Controllers
 {
@@ -15,11 +18,13 @@ namespace Anuncio.Api.Controllers
     {
         private readonly IMediator mediator;
         private readonly IAnuncioQueryService query;
+        private readonly IWebHostEnvironment hosting;
 
-        public AnuncioController(IMediator mediator, IAnuncioQueryService query)
+        public AnuncioController(IMediator mediator, IAnuncioQueryService query, IWebHostEnvironment hosting)
         {
             this.query = query;
             this.mediator = mediator;
+            this.hosting = hosting;
         }
 
         [HttpGet]
@@ -46,45 +51,77 @@ namespace Anuncio.Api.Controllers
             var data = await this.query.GetDate(dateNow);
             return Ok(data);
         }
-
+        
         [HttpPost]
-        [Route("[action]")]
+        [Route("[action]")]          
         public async Task<IActionResult> AnuncioCreate(AnuncioCreateCommand notification)
-        {
-            await this.mediator.Publish(notification);
-            return Ok();
+        {           
+            if(ModelState.IsValid)
+            {
+                var folderPath = System.IO.Path.Combine(hosting.ContentRootPath, "files");
+                string name = Guid.NewGuid() + "." + notification.nombreArchivo;
+
+                notification.nombreArchivo = name;
+                notification.url = "/files" + name;
+                string path = Path.Combine(folderPath, name);
+
+                System.IO.File.WriteAllBytes(path, Convert.FromBase64String(notification.file));
+
+                await this.mediator.Publish(notification);
+
+                return NoContent();
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> AnuncioDelete(AnuncioDeleteCommand notification)
         {
-            await this.mediator.Publish(notification);
-            return Ok();
+            if(ModelState.IsValid)
+            {
+                await this.mediator.Publish(notification);
+                return NoContent();
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> AnuncioUpdate(AnuncioUpdateCommand notification)
         {
-            await this.mediator.Publish(notification);
-            return Ok();
+            if(ModelState.IsValid)
+            {
+                await this.mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> PublicarAnuncio(AnuncioPublicarCommand notification)
         {
-            await this.mediator.Publish(notification);
-            return Ok();
+            if(ModelState.IsValid)
+            {
+                await this.mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> DespublicarAnuncio(AnuncioDespublicarCommand notification)
         {
-            await this.mediator.Publish(notification);
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                await this.mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
     }
 }

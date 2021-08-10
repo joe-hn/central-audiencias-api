@@ -28,16 +28,23 @@ namespace ListaReproduccionAudiencia.Api.Controllers
         [Route("[action]")]
         public async Task<IActionResult> CrearListaReproduccion(AudienciaCreateListCommand notificacion)
         {
-            await this.mediator.Publish(notificacion);
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                await this.mediator.Publish(notificacion);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
         [HttpDelete]
         [Route("[action]")]
         public async Task<IActionResult> BorrarListaReproduccion(AudienciaDeleteListCommand notificion)
-        {
-            await this.mediator.Publish(notificion);
-            return Ok();
+        {if (ModelState.IsValid)
+            {
+                await this.mediator.Publish(notificion);
+                return NoContent();
+            }
+            return BadRequest();
         }       
 
         [HttpGet]

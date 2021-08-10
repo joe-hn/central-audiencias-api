@@ -28,6 +28,13 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>bin\dll\Interop.WMPLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

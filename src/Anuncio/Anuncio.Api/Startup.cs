@@ -7,6 +7,7 @@ using Anuncio.Service.Queries.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,12 @@ namespace Anuncio.Api
                     , b => b.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
+            });
+
+            services.Configure<FormOptions>(op => {
+                op.ValueLengthLimit = int.MaxValue;
+                op.MultipartBodyLengthLimit = int.MaxValue;
+                op.MemoryBufferThreshold = int.MaxValue;
             });
 
 

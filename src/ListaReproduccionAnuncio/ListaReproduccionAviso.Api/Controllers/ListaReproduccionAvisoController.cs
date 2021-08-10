@@ -26,24 +26,34 @@ namespace ListaReproduccionAviso.Api.Controllers
         [Route("[action]")]
         public async Task<IActionResult> PublicarAviso(PublicarAvisoCommand notification)
         {
-            await mediator.Publish(notification);
-            return Ok();
+            if(ModelState.IsValid)
+            {
+                await mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> CrearListaReproduccion(AvisoCreateListCommand notification)
-        {
-            await mediator.Publish(notification);
-            return Ok();
+        {if (ModelState.IsValid)
+            {
+                await mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> EliminarListaReproduccion(AvisoDeleteListCommand notification)
-        {
-            await mediator.Publish(notification);
-            return Ok();
+        {if (ModelState.IsValid)
+            {
+                await mediator.Publish(notification);
+                return NoContent();
+            }
+            return BadRequest();
         }
 
 

@@ -30,7 +30,7 @@ namespace ListaReproduccionAudiencia.Service.Queries.Queries
 
         public async Task<List<ParteDto>> GetParteAsync()
         {
-            var entities = await this.repository.GetEntity<Parte>().ToListAsync();
+            var entities = await this.repository.GetEntity<Parte>().OrderBy(c => c.AudienciaId).ThenBy(c => c.Nombre).ToListAsync();
             return this.mapper.Map<List<ParteDto>>(entities);
         }
 
